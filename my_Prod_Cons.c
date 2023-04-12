@@ -80,7 +80,7 @@ Clock getClock(){
 
 // Função usada para enviar clocks ao buffer.
 void submitClock(Clock c){
-
+    pthread_mutex_lock(&mutex);
     while (Clock_count == BUFFER_SIZE){
         pthread_cond_wait(&condFull, &mutex);
     }
@@ -88,6 +88,7 @@ void submitClock(Clock c){
     buffer[Clock_count] = c;
     Clock_count++;
     pthread_cond_signal(&CondEmpty);
+    pthread_mutex_unlock(&mutex);
 
 }
 
